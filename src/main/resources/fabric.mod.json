@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "programmer_art_injector",
+  "version": "${version}",
+  "name": "Programmer Art Injector",
+  "description": "Allows you to inject resource files into the programmer art resource pack",
+  "authors": [
+    "ExtraCrafTX"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/programmer_art_injector/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.extracraftx.minecraft.programmerartinjector.ProgrammerArtInjector"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.4.0"
+  },
+  "mixins": [
+    "programmer_art_injector.mixins.json"
+  ]
+}
