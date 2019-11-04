@@ -3,7 +3,9 @@
   "package": "com.extracraftx.minecraft.programmerartinjector.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [],
-  "client": [],
+  "client": [
+    "ClientResourcePackCreatorMixin"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1
