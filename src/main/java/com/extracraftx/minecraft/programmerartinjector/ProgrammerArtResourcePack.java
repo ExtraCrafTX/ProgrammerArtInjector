@@ -5,8 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Enumeration;
+import java.util.Set;
+import java.util.regex.Pattern;
 
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.resource.DefaultResourcePack;
 import net.minecraft.resource.DirectoryResourcePack;
 import net.minecraft.resource.ResourceType;
@@ -14,6 +21,8 @@ import net.minecraft.resource.ZipResourcePack;
 import net.minecraft.util.Identifier;
 
 public class ProgrammerArtResourcePack extends ZipResourcePack {
+
+	private static final Pattern RESOURCE_PACK_PATH = Pattern.compile("[a-z0-9-_]+");
 
     public ProgrammerArtResourcePack(File file) {
         super(file);
@@ -66,6 +75,39 @@ public class ProgrammerArtResourcePack extends ZipResourcePack {
 
         }
         throw new FileNotFoundException(resource.getPath());
+    }
+
+    @Override
+    public Set<String> getNamespaces(ResourceType resourceType) {
+        Set<String> namespaces = super.getNamespaces(resourceType);
+
+        if(!resourceType.equals(ResourceType.CLIENT_RESOURCES))
+            return namespaces;
+
+        for(ModContainer container : FabricLoader.getInstance().getAllMods()){
+            Path path = container.getRootPath();
+            path = path.toAbsolutePath().normalize();
+            
+            Path childPath = path.resolve(("programmer_art/"+resourceType.getName()).replace("/", path.getFileSystem().getSeparator())).toAbsolutePath().normalize();
+            if(childPath.startsWith(path) && Files.exists(childPath)){
+                try(DirectoryStream<Path> dirs = Files.newDirectoryStream(childPath, Files::isDirectory)){
+                    for(Path dir : dirs){
+                        String name = dir.getFileName().toString();
+                        name = name.replace(path.getFileSystem().getSeparator(), "");
+
+                        if(RESOURCE_PACK_PATH.matcher(name).matches()){
+                            namespaces.add(name);
+                        }else{
+                            ProgrammerArtInjector.LOGGER.warn("Ignoring invalid namespace {} in mod {}", name, container.getMetadata().getId());
+                        }
+                    }
+                }catch(IOException e){
+
+                }
+            }
+        }
+
+        return namespaces;
     }
 
 }

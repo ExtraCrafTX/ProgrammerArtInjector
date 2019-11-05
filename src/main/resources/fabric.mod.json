@@ -11,6 +11,11 @@
   "license": "MIT",
   "icon": "assets/programmer_art_injector/icon.png",
   "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.extracraftx.minecraft.programmerartinjector.ProgrammerArtInjector"
+    ]
+  },
   "depends": {
     "fabricloader": ">=0.4.0"
   },
