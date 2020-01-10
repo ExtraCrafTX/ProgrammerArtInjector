@@ -9,9 +9,11 @@ repositories {
     maven { url "https://maven.extracraftx.com"}
 }
 dependencies {
-    modCompile "com.extracraftx.minecraft:ProgrammerArtInjector:{VERSION}"
+    modImplementation "com.extracraftx.minecraft:ProgrammerArtInjector:{VERSION}"
+    include "com.extracraftx.minecraft:ProgrammerArtInjector:{VERSION}"
 }
 ```
+The `include` declaration makes it so that this mod is bundled with your mod. This means users will not have to download the mod separately.
 
 ## Usage
 To include textures for programmer art, add a folder named `programmer_art` to your `resources` folder. In here, you can follow the normal `resources` folder structure.
