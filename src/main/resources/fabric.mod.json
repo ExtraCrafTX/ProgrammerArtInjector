@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "programmer_art_injector",
+  "id": "programmerartinjector",
   "version": "${version}",
   "name": "Programmer Art Injector",
   "description": "Allows you to inject resource files into the programmer art resource pack",
@@ -9,7 +9,7 @@
   ],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/programmer_art_injector/icon.png",
+  "icon": "assets/programmerartinjector/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
@@ -20,6 +20,6 @@
     "fabricloader": ">=0.4.0"
   },
   "mixins": [
-    "programmer_art_injector.mixins.json"
+    "programmerartinjector.mixins.json"
   ]
 }
