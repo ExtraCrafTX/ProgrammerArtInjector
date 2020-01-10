@@ -110,4 +110,12 @@ public class ProgrammerArtResourcePack extends ZipResourcePack {
         return namespaces;
     }
 
+    @Override
+    protected InputStream openFile(String name) throws IOException {
+        if(name.equals("pack.mcmeta") || name.equals("pack.png")){
+            return DefaultResourcePack.class.getClassLoader().getResources("programmer_art/"+name).nextElement().openStream();
+        }
+        return super.openFile(name);
+    }
+
 }
