@@ -38,7 +38,7 @@ public class ProgrammerArtResourcePack extends ZipResourcePack {
         boolean contains = super.contains(resourceType, resource);
         if(contains || resourceType.equals(ResourceType.SERVER_DATA))
             return contains;
-        String path = String.format("programmer_art/%s/%s/%s", resourceType.getName(), resource.getNamespace(), resource.getPath());
+        String path = String.format("programmer_art/%s/%s/%s", resourceType.getDirectory(), resource.getNamespace(), resource.getPath());
         try{
             Enumeration<URL> urls = DefaultResourcePack.class.getClassLoader().getResources(path);
             URL url = null;
@@ -60,7 +60,7 @@ public class ProgrammerArtResourcePack extends ZipResourcePack {
     public InputStream open(ResourceType resourceType, Identifier resource) throws IOException {
         if(super.contains(resourceType, resource))
             return super.open(resourceType, resource);
-        String path = String.format("programmer_art/%s/%s/%s", resourceType.getName(), resource.getNamespace(), resource.getPath());
+        String path = String.format("programmer_art/%s/%s/%s", resourceType.getDirectory(), resource.getNamespace(), resource.getPath());
         try{
             Enumeration<URL> urls = DefaultResourcePack.class.getClassLoader().getResources(path);
             URL url = null;
@@ -88,7 +88,7 @@ public class ProgrammerArtResourcePack extends ZipResourcePack {
             Path path = container.getRootPath();
             path = path.toAbsolutePath().normalize();
             
-            Path childPath = path.resolve(("programmer_art/"+resourceType.getName()).replace("/", path.getFileSystem().getSeparator())).toAbsolutePath().normalize();
+            Path childPath = path.resolve(("programmer_art/"+resourceType.getDirectory()).replace("/", path.getFileSystem().getSeparator())).toAbsolutePath().normalize();
             if(childPath.startsWith(path) && Files.exists(childPath)){
                 try(DirectoryStream<Path> dirs = Files.newDirectoryStream(childPath, Files::isDirectory)){
                     for(Path dir : dirs){
@@ -108,6 +108,14 @@ public class ProgrammerArtResourcePack extends ZipResourcePack {
         }
 
         return namespaces;
+    }
+
+    @Override
+    protected InputStream openFile(String name) throws IOException {
+        if(name.equals("pack.mcmeta") || name.equals("pack.png")){
+            return DefaultResourcePack.class.getClassLoader().getResources("programmer_art/"+name).nextElement().openStream();
+        }
+        return super.openFile(name);
     }
 
 }

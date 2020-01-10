@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.client.resource.ClientResourcePackCreator;
+import net.minecraft.client.resource.ClientBuiltinResourcePackProvider;
 import net.minecraft.resource.ResourcePack;
 
-@Mixin(ClientResourcePackCreator.class)
+@Mixin(ClientBuiltinResourcePackProvider.class)
 public class ClientResourcePackCreatorMixin{
 
     @Inject(method = "method_16048", at=@At("HEAD"), cancellable = true)
