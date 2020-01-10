@@ -1,4 +1,4 @@
-# ProgrammerArtInjector
+# <img src="https://imgur.com/Hu7FfAg.png" align="right" width=64 />ProgrammerArtInjector
 This is a library mod that allows other mods to inject resources into the "Programmer Art" resource pack.
 
 Now you can make your textures fit in, even when people are using the classic textures!
