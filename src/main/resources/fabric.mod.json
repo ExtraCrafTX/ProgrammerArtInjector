@@ -9,7 +9,7 @@
   ],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/programmerartinjector/icon.png",
+  "icon": "programmer_art/pack.png",
   "environment": "*",
   "entrypoints": {
     "client": [
