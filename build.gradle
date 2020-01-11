@@ -78,3 +78,15 @@ publishing {
 		}
 	}
 }
+
+allprojects {
+    afterEvaluate { project ->
+        project.getExtensions().findByType(PublishingExtension.class).publications{pubs ->
+			pubs.forEach{p->
+				p.pom.withXml{
+					asNode().dependencies[0].value = []
+				}
+			}
+		}
+    }
+}
