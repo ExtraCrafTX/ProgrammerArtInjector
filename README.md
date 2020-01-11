@@ -13,7 +13,17 @@ dependencies {
     include "com.extracraftx.minecraft:ProgrammerArtInjector:{VERSION}"
 }
 ```
+`{VERSION}` should be replaced with the version of this mod you would like to bundle.
+
 The `include` declaration makes it so that this mod is bundled with your mod. This means users will not have to download the mod separately.
+
+### For older versions
+If you would like to include this in a project that uses a Loom version < `0.2.6`, you will need to change the `modImplementation` line to the following:
+```gradle
+modImplementation ("com.extracraftx.minecraft:ProgrammerArtInjector:{VERSION}"){
+    exclude group: 'net.fabricmc'
+}
+```
 
 ## Usage
 To include textures for programmer art, add a folder named `programmer_art` to your `resources` folder. In here, you can follow the normal `resources` folder structure.
