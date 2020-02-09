@@ -12,13 +12,22 @@ import java.util.Enumeration;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.SharedConstants;
 import net.minecraft.resource.DefaultResourcePack;
 import net.minecraft.resource.DirectoryResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.ZipResourcePack;
+import net.minecraft.resource.metadata.PackResourceMetadata;
+import net.minecraft.resource.metadata.PackResourceMetadataReader;
+import net.minecraft.resource.metadata.ResourceMetadataReader;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 
 public class ProgrammerArtResourcePack extends ZipResourcePack {
 
@@ -116,6 +125,34 @@ public class ProgrammerArtResourcePack extends ZipResourcePack {
             return DefaultResourcePack.class.getClassLoader().getResources("programmer_art/"+name).nextElement().openStream();
         }
         return super.openFile(name);
+    }
+
+    @Override
+    public <T> T parseMetadata(ResourceMetadataReader<T> metaReader) throws IOException {
+        if(metaReader instanceof PackResourceMetadataReader)
+            return super.parseMetadata((ResourceMetadataReader<T>)new PackResourceDefaultedMetadataReader());
+        return super.parseMetadata(metaReader);
+    }
+
+    public static class PackResourceDefaultedMetadataReader implements ResourceMetadataReader<PackResourceMetadata>{
+        
+        public PackResourceMetadata fromJson(JsonObject jsonObject) {
+            Text text = Text.Serializer.fromJson(jsonObject.get("description"));
+            if (text == null) {
+                throw new JsonParseException("Invalid/missing description!");
+            } else {
+                if(jsonObject.has("pack_format")){
+                    int i = JsonHelper.getInt(jsonObject, "pack_format");
+                    return new PackResourceMetadata(text, i);
+                }else{
+                    return new PackResourceMetadata(text, SharedConstants.getGameVersion().getPackVersion());
+                }
+            }
+        }
+
+        public String getKey() {
+            return "pack";
+        }
     }
 
 }
