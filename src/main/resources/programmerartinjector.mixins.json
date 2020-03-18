@@ -1,10 +1,11 @@
 {
-  "required": true,
+  "required": false,
   "package": "com.extracraftx.minecraft.programmerartinjector.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [],
   "client": [
-    "ClientResourcePackCreatorMixin"
+    "ClientResourcePackCreatorMixin",
+    "ClientResourcePackCreatorStaticMixin"
   ],
   "server": [],
   "injectors": {
