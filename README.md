@@ -25,5 +25,5 @@ Example:
 
 This mod will inject these resources into the "Programmer Art" resource pack.
 
-[version-image]: https://badges.kaamiljasani.com/curseforge/latest/357932
+[version-image]: https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fmaven.extracraftx.com%2Fcom%2Fextracraftx%2Fminecraft%2FProgrammerArtInjector%2Fmaven-metadata.xml
 [version-link]: https://maven.extracraftx.com/com/extracraftx/minecraft/ProgrammerArtInjector/
