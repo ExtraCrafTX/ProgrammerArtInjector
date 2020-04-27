@@ -13,11 +13,9 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.SharedConstants;
 import net.minecraft.resource.DefaultResourcePack;
 import net.minecraft.resource.DirectoryResourcePack;
 import net.minecraft.resource.ResourceType;
@@ -25,6 +23,7 @@ import net.minecraft.resource.ZipResourcePack;
 import net.minecraft.resource.metadata.PackResourceMetadata;
 import net.minecraft.resource.metadata.PackResourceMetadataReader;
 import net.minecraft.resource.metadata.ResourceMetadataReader;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -121,33 +120,34 @@ public class ProgrammerArtResourcePack extends ZipResourcePack {
 
     @Override
     protected InputStream openFile(String name) throws IOException {
-        if(name.equals("pack.mcmeta") || name.equals("pack.png")){
+        if(name.equals("pack.png")){
             return DefaultResourcePack.class.getClassLoader().getResources("programmer_art/"+name).nextElement().openStream();
         }
         return super.openFile(name);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T parseMetadata(ResourceMetadataReader<T> metaReader) throws IOException {
         if(metaReader instanceof PackResourceMetadataReader)
-            return super.parseMetadata((ResourceMetadataReader<T>)new PackResourceDefaultedMetadataReader());
+            return super.parseMetadata((ResourceMetadataReader<T>) READER);
         return super.parseMetadata(metaReader);
     }
 
-    public static class PackResourceDefaultedMetadataReader implements ResourceMetadataReader<PackResourceMetadata>{
+    private static final String DESCRIPTION = "The classic look of Minecraft,\n§8§onow with some mods!";
+    private static final CustomMetadataReader READER = new CustomMetadataReader(DESCRIPTION);
+
+    private static class CustomMetadataReader implements ResourceMetadataReader<PackResourceMetadata>{
+
+        private final Text text;
+
+        public CustomMetadataReader(String description) {
+            this.text = new LiteralText(description);
+        }
         
         public PackResourceMetadata fromJson(JsonObject jsonObject) {
-            Text text = Text.Serializer.fromJson(jsonObject.get("description"));
-            if (text == null) {
-                throw new JsonParseException("Invalid/missing description!");
-            } else {
-                if(jsonObject.has("pack_format")){
-                    int i = JsonHelper.getInt(jsonObject, "pack_format");
-                    return new PackResourceMetadata(text, i);
-                }else{
-                    return new PackResourceMetadata(text, SharedConstants.getGameVersion().getPackVersion());
-                }
-            }
+            int pack_format = JsonHelper.getInt(jsonObject, "pack_format");
+            return new PackResourceMetadata(text, pack_format);
         }
 
         public String getKey() {
